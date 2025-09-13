@@ -1,12 +1,16 @@
-import macarrao from '../../../assets/images/macarrao_hero.png'
+import { Restaurante } from '../../../pages/Home'
 import * as S from './syles'
 
-const Hero = () => {
+type Props = {
+  restaurante: Restaurante
+}
+
+const Hero = ({ restaurante }: Props) => {
   return (
-    <S.Section style={{ backgroundImage: `url(${macarrao})` }}>
+    <S.Section style={{ backgroundImage: `url(${restaurante.capa})` }}>
       <div className="container">
-        <span>Italiana</span>
-        <h4>La Dolce Vita Trattoria</h4>
+        <span>Restaurante</span>
+        <h4>{restaurante.titulo}</h4>
       </div>
     </S.Section>
   )

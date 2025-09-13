@@ -1,14 +1,20 @@
 import styled from 'styled-components'
-import { cores } from '../../../styles'
+import { Button, cores } from '../../../styles'
 
 export const Card = styled.div`
   color: ${cores.laranjaEscuro};
   background-color: ${cores.vermelho};
   padding: 8px;
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
 
   img {
     margin-bottom: 8px;
+    max-width: 100%;
+    width: 304px;
+    object-fit: cover;
+    height: 167px;
   }
 
   h4 {
@@ -18,16 +24,10 @@ export const Card = styled.div`
 
   p {
     margin-bottom: 8px;
+    line-height: 22px;
   }
 
-  button {
-    display: block;
-    color: ${cores.vermelho};
-    background-color: ${cores.laranjaEscuro};
-    padding: 4px 84px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
+  ${Button} {
+    margin-top: auto;
   }
 `

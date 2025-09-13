@@ -1,25 +1,84 @@
 import RestaurantesCard from '../../components/Restaurantes/RestaurantesCard'
-import Pizza from '../../models/Pizza'
+import fechar from '../../assets/images/close.svg'
 import * as S from './styles'
+import { Button } from '../../styles'
+import { useState } from 'react'
+import { ItemCardapio } from '../../pages/Home'
 
 export type Props = {
-  pizzas: Pizza[]
+  restaurante: ItemCardapio[]
 }
 
-const RestaurantesCardSection = ({ pizzas }: Props) => {
+export interface ModalState {
+  visible: boolean
+  item?: ItemCardapio
+}
+
+export function formatPrice(preco = 0) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(preco)
+}
+
+const RestaurantesCardSection = ({ restaurante }: Props) => {
+  const [modal, setModal] = useState<ModalState>({
+    visible: false
+  })
+
+  function openModal(item: ItemCardapio) {
+    setModal({
+      visible: true,
+      item
+    })
+  }
+
+  function closeModal() {
+    setModal({
+      visible: false
+    })
+  }
+
   return (
-    <div className="container">
-      <S.Section>
-        {pizzas.map((p) => (
-          <RestaurantesCard
-            key={p.id}
-            image={p.image}
-            title={p.title}
-            description={p.description}
-          />
-        ))}
-      </S.Section>
-    </div>
+    <>
+      <div className="container">
+        <S.Section>
+          {restaurante.map((p) => (
+            <RestaurantesCard
+              key={p.id}
+              image={p.foto}
+              title={p.nome}
+              description={p.descricao}
+              onOpen={() => openModal(p)}
+            />
+          ))}
+        </S.Section>
+      </div>
+
+      <S.Modal className={modal.visible ? 'visible' : ''}>
+        {modal.item && (
+          <S.ModalContent className="container">
+            <img src={fechar} onClick={closeModal} />
+            <div>
+              <img src={modal.item.foto} alt={modal.item.nome} />
+              <div>
+                <h4>{modal.item.nome}</h4>
+                <p>
+                  {modal.item.descricao}
+                  <br />
+                  <br />
+                  {modal.item.porcao}
+                </p>
+                <Button>
+                  Adicionar ao carrinho - {formatPrice(modal.item.preco)}
+                </Button>
+              </div>
+            </div>
+          </S.ModalContent>
+        )}
+        <div className="overlay" onClick={closeModal}></div>
+      </S.Modal>
+    </>
   )
 }
 

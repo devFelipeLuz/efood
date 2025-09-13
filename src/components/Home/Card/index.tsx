@@ -4,20 +4,42 @@ import { Button, Container, Content, Infos, ScoreDiv, Title } from './styles'
 
 type Props = {
   image: string
-  infos: string[]
+  tipo: string
+  destacado: boolean
   title: string
-  score: string
+  score: number
   description: string
+  id: number
 }
 
-const Card = ({ image, infos, title, score, description }: Props) => {
+const Card = ({
+  image,
+  tipo,
+  title,
+  score,
+  description,
+  id,
+  destacado
+}: Props) => {
+  function getDescription(description: string) {
+    if (description.length > 245) {
+      return description.slice(0, 243) + '...'
+    }
+    return description
+  }
+
   return (
     <Container>
       <img src={image} alt={title} />
       <Infos>
-        {infos.map((info) => (
-          <Tag key={info}>{info}</Tag>
-        ))}
+        {destacado ? (
+          <>
+            <Tag>Destaque da semana</Tag>
+            <Tag>{tipo}</Tag>
+          </>
+        ) : (
+          <Tag>{tipo}</Tag>
+        )}
       </Infos>
       <Content>
         <div>
@@ -27,8 +49,8 @@ const Card = ({ image, infos, title, score, description }: Props) => {
             <img src={estrela} alt="estrela" />
           </ScoreDiv>
         </div>
-        <p>{description}</p>
-        <Button to="/restaurantes">Saiba mais</Button>
+        <p>{getDescription(description)}</p>
+        <Button to={`/restaurantes/${id}`}>Saiba mais</Button>
       </Content>
     </Container>
   )

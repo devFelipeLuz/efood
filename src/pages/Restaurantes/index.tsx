@@ -1,60 +1,29 @@
+import { useParams } from 'react-router-dom'
 import Header from '../../components/Restaurantes/Header'
 import Hero from '../../components/Restaurantes/Hero'
 import RestaurantesCardSection from '../../containers/RestaurantesCardSection'
-import pizza from '../../assets/images/pizza.png'
-import Pizza from '../../models/Pizza'
-
-const sabores: Pizza[] = [
-  {
-    id: 1,
-    image: pizza,
-    title: 'Pizza Marguerita',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!'
-  },
-  {
-    id: 2,
-    image: pizza,
-    title: 'Pizza Marguerita',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!'
-  },
-  {
-    id: 3,
-    image: pizza,
-    title: 'Pizza Marguerita',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!'
-  },
-  {
-    id: 4,
-    image: pizza,
-    title: 'Pizza Marguerita',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!'
-  },
-  {
-    id: 5,
-    image: pizza,
-    title: 'Pizza Marguerita',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!'
-  },
-  {
-    id: 6,
-    image: pizza,
-    title: 'Pizza Marguerita',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!'
-  }
-]
+import { useEffect, useState } from 'react'
+import { Restaurante } from '../Home'
 
 const Restaurantes = () => {
+  const { id } = useParams()
+  const [restaurante, setRestaurante] = useState<Restaurante>()
+
+  useEffect(() => {
+    fetch(`https://ebac-fake-api.vercel.app/api/efood/restaurantes/${id}`)
+      .then((res) => res.json())
+      .then((res) => setRestaurante(res))
+  }, [id])
+
+  if (!restaurante) {
+    return <h3>Carregando...</h3>
+  }
+
   return (
     <>
       <Header />
-      <Hero />
-      <RestaurantesCardSection pizzas={sabores} />
+      <Hero restaurante={restaurante} />
+      <RestaurantesCardSection restaurante={restaurante.cardapio} />
     </>
   )
 }

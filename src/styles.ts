@@ -42,3 +42,14 @@ export const Logo = styled.img`
   height: 56px;
   margin-bottom: 136px;
 `
+
+export const Button = styled.button`
+  display: block;
+  color: ${cores.vermelho};
+  background-color: ${cores.laranjaEscuro};
+  padding: 4px 84px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+`

@@ -2,6 +2,7 @@ import { Logo } from '../../../styles'
 import logo from '../../../assets/images/logo.svg'
 import banner from '../../../assets/images/Vector.png'
 import * as S from './styles'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
@@ -11,7 +12,9 @@ const Header = () => {
           <ul>
             <li>Restaurantes</li>
             <li>
-              <Logo src={logo} />
+              <Link to={'/'}>
+                <Logo src={logo} />
+              </Link>
             </li>
             <li>0 produto(s) no carrinho</li>
           </ul>

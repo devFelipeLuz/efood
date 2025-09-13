@@ -7,8 +7,12 @@ export const Container = styled.div`
   margin-bottom: 48px;
   position: relative;
 
-  img {
+  > img {
     display: block;
+    max-width: 100%;
+    width: 472px;
+    height: 217px;
+    object-fit: cover;
   }
 
   ${ButtonTag} {
