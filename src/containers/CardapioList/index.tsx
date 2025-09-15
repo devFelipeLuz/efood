@@ -5,6 +5,8 @@ import { Button } from '../../styles'
 import { useState } from 'react'
 import { ItemCardapio } from '../../pages/Home'
 import TemplateGrid from '../../components/TemplateGrid'
+import { useDispatch } from 'react-redux'
+import { add, open } from '../../store/reducers/cart'
 
 export type Props = {
   restaurante: ItemCardapio[]
@@ -23,6 +25,7 @@ export function formatPrice(preco = 0) {
 }
 
 const Cardapio = ({ restaurante }: Props) => {
+  const dispatch = useDispatch()
   const [modal, setModal] = useState<ModalState>({
     visible: false
   })
@@ -38,6 +41,11 @@ const Cardapio = ({ restaurante }: Props) => {
     setModal({
       visible: false
     })
+  }
+
+  function addToCart(item: ItemCardapio) {
+    dispatch(add(item))
+    dispatch(open())
   }
 
   return (
@@ -72,7 +80,7 @@ const Cardapio = ({ restaurante }: Props) => {
                   <br />
                   {modal.item.porcao}
                 </p>
-                <Button>
+                <Button onClick={() => addToCart(modal.item!)}>
                   Adicionar ao carrinho - {formatPrice(modal.item.preco)}
                 </Button>
               </div>

@@ -11,6 +11,10 @@ export const Header = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    a {
+      cursor: pointer;
+    }
   }
 
   ${Logo} {

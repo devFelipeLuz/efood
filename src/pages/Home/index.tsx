@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
 import Banner from '../../components/Home/Banner'
 import RestaurantesList from '../../containers/RestaurantesList'
+import { useGetRestaurantQuery } from '../../services/api'
 
 export type ItemCardapio = {
   foto: string
@@ -23,13 +23,7 @@ export type Restaurante = {
 }
 
 const Home = () => {
-  const [restaurantes, setRestaurantes] = useState<Restaurante[]>([])
-
-  useEffect(() => {
-    fetch('https://ebac-fake-api.vercel.app/api/efood/restaurantes')
-      .then((res) => res.json())
-      .then((res) => setRestaurantes(res))
-  }, [])
+  const { data: restaurantes } = useGetRestaurantQuery()
 
   if (!restaurantes) {
     return <h3>Carregando...</h3>
