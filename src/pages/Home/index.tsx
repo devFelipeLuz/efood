@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Banner from '../../components/Home/Banner'
-import CardSection from '../../containers/HomeCardSection'
+import RestaurantesList from '../../containers/RestaurantesList'
 
 export type ItemCardapio = {
   foto: string
@@ -38,7 +38,7 @@ const Home = () => {
   return (
     <>
       <Banner />
-      <CardSection restaurantes={restaurantes} />
+      <RestaurantesList restaurantes={restaurantes} />
     </>
   )
 }

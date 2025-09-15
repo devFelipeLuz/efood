@@ -4,7 +4,6 @@ import { ButtonTag, cores } from '../../../styles'
 
 export const Container = styled.div`
   font-size: 14px;
-  margin-bottom: 48px;
   position: relative;
 
   > img {

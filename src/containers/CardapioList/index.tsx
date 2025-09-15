@@ -4,6 +4,7 @@ import * as S from './styles'
 import { Button } from '../../styles'
 import { useState } from 'react'
 import { ItemCardapio } from '../../pages/Home'
+import TemplateGrid from '../../components/TemplateGrid'
 
 export type Props = {
   restaurante: ItemCardapio[]
@@ -21,7 +22,7 @@ export function formatPrice(preco = 0) {
   }).format(preco)
 }
 
-const RestaurantesCardSection = ({ restaurante }: Props) => {
+const Cardapio = ({ restaurante }: Props) => {
   const [modal, setModal] = useState<ModalState>({
     visible: false
   })
@@ -42,17 +43,19 @@ const RestaurantesCardSection = ({ restaurante }: Props) => {
   return (
     <>
       <div className="container">
-        <S.Section>
-          {restaurante.map((p) => (
-            <RestaurantesCard
-              key={p.id}
-              image={p.foto}
-              title={p.nome}
-              description={p.descricao}
-              onOpen={() => openModal(p)}
-            />
-          ))}
-        </S.Section>
+        <S.CardapioSection>
+          <TemplateGrid columns={3} columnGap={40} rowGap={32}>
+            {restaurante.map((p) => (
+              <RestaurantesCard
+                key={p.id}
+                image={p.foto}
+                title={p.nome}
+                description={p.descricao}
+                onOpen={() => openModal(p)}
+              />
+            ))}
+          </TemplateGrid>
+        </S.CardapioSection>
       </div>
 
       <S.Modal className={modal.visible ? 'visible' : ''}>
@@ -82,4 +85,4 @@ const RestaurantesCardSection = ({ restaurante }: Props) => {
   )
 }
 
-export default RestaurantesCardSection
+export default Cardapio

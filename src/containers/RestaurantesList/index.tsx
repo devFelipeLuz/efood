@@ -1,15 +1,16 @@
 import Card from '../../components/Home/Card'
+import Section from '../../components/Section'
+import TemplateGrid from '../../components/TemplateGrid'
 import { Restaurante } from '../../pages/Home'
-import { Section } from './styles'
 
 export type Props = {
   restaurantes: Restaurante[]
 }
 
-const CardSection = ({ restaurantes }: Props) => {
+const RestaurantesList = ({ restaurantes }: Props) => {
   return (
-    <div className="container">
-      <Section>
+    <Section>
+      <TemplateGrid columns={2} columnGap={80} rowGap={48}>
         {restaurantes.map((prato) => (
           <Card
             key={prato.id}
@@ -22,9 +23,9 @@ const CardSection = ({ restaurantes }: Props) => {
             description={prato.descricao}
           />
         ))}
-      </Section>
-    </div>
+      </TemplateGrid>
+    </Section>
   )
 }
 
-export default CardSection
+export default RestaurantesList
