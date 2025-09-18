@@ -3,10 +3,10 @@ import fechar from '../../assets/images/close.svg'
 import * as S from './styles'
 import { Button } from '../../styles'
 import { useState } from 'react'
-import { ItemCardapio } from '../../pages/Home'
 import TemplateGrid from '../../components/TemplateGrid'
 import { useDispatch } from 'react-redux'
 import { add, open } from '../../store/reducers/cart'
+import { formatPrice } from '../../utils'
 
 export type Props = {
   restaurante: ItemCardapio[]
@@ -15,13 +15,6 @@ export type Props = {
 export interface ModalState {
   visible: boolean
   item?: ItemCardapio
-}
-
-export function formatPrice(preco = 0) {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(preco)
 }
 
 const Cardapio = ({ restaurante }: Props) => {
@@ -80,7 +73,11 @@ const Cardapio = ({ restaurante }: Props) => {
                   <br />
                   {modal.item.porcao}
                 </p>
-                <Button onClick={() => addToCart(modal.item!)}>
+                <Button
+                  onClick={() => {
+                    if (modal.item) addToCart(modal.item)
+                  }}
+                >
                   Adicionar ao carrinho - {formatPrice(modal.item.preco)}
                 </Button>
               </div>

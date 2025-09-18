@@ -3,7 +3,6 @@ import Header from '../../components/Restaurantes/Header'
 import Hero from '../../components/Restaurantes/Hero'
 
 import { useEffect, useState } from 'react'
-import { Restaurante } from '../Home'
 import Cardapio from '../../containers/CardapioList'
 
 const Restaurantes = () => {

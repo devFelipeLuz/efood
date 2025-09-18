@@ -1,7 +1,6 @@
 import Card from '../../components/Home/Card'
 import Section from '../../components/Section'
 import TemplateGrid from '../../components/TemplateGrid'
-import { Restaurante } from '../../pages/Home'
 
 export type Props = {
   restaurantes: Restaurante[]

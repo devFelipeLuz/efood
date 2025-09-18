@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { cores } from '../../styles'
-import lixo from '../../assets/images/lixeira-de-reciclagem.svg'
 
 export const CartContainer = styled.div`
   position: fixed;
@@ -28,59 +27,66 @@ export const Overlay = styled.div`
 `
 
 export const Sidebar = styled.aside`
+  display: block;
   background-color: ${cores.vermelho};
   z-index: 1;
   max-width: 360px;
   width: 100%;
   padding: 32px 8px 0 8px;
 
-  > div {
-    margin-top: 26px;
-    margin-bottom: 16px;
-    display: flex;
-    justify-content: space-between;
+  .empty-message {
+    font-size: 14px;
+    line-height: 22px;
+    color: ${cores.branco};
+    text-align: center;
+  }
 
-    span {
-      font-weight: bold;
-      font-size: 14px;
-      color: ${cores.laranjaEscuro};
+  .invisible {
+    display: none;
+  }
+`
+
+export const InputGroup = styled.div`
+  margin-bottom: 8px;
+  font-size: 14px;
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    height: 32px;
+    background-color: ${cores.laranjaEscuro};
+    border: none;
+    font-weight: bold;
+
+    &.error {
+      border: 2px solid darkblue;
     }
   }
 `
 
-export const CartItem = styled.li`
-  position: relative;
+export const FlexInput = styled.div`
   display: flex;
-  background-color: ${cores.laranjaEscuro};
-  padding: 8px;
-  margin-bottom: 16px;
+  justify-content: space-between;
 
-  img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    margin-right: 8px;
+  ${InputGroup} {
+    input {
+      max-width: 155px;
+      width: 100%;
+    }
   }
 
-  h4 {
-    font-size: 18px;
-    font-weight: 900%;
-    margin-bottom: 16px;
+  #cardNumber {
+    max-width: 240px;
   }
 
-  span {
-    font-size: 14px;
-  }
-
-  button {
-    background-image: url(${lixo});
-    background-color: transparent;
-    border: none;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
+  #cardCode {
+    max-width: 88px;
   }
 `

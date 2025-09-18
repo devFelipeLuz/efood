@@ -1,14 +1,27 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { Button } from '../../styles'
+import { useState } from 'react'
 
-import { CartContainer, CartItem, Overlay, Sidebar } from './styles'
+import CartStep from './CartStep'
+import DeliveryStep from './DeliveryStep'
+import PaymentStep from './PaymentStep'
+import SuccessStep from './SuccessStep'
+
+import { clear, close, remove } from '../../store/reducers/cart'
 import { RootReducer } from '../../store'
-import { close, remove } from '../../store/reducers/cart'
-import { formatPrice } from '../../containers/CardapioList'
+
+import { CartContainer, Overlay, Sidebar } from './styles'
+import { usePurchaseMutation } from '../../services/api'
+
+type BuyStep = 'cart' | 'delivery' | 'payment' | 'success'
 
 const Cart = () => {
-  const { isOpen, items } = useSelector((state: RootReducer) => state.cart)
+  const { isOpen: isOpenCart, items } = useSelector(
+    (state: RootReducer) => state.cart
+  )
+  const [buyState, setBuyState] = useState<BuyStep>('cart')
+  const [deliveryData, setDeliveryData] = useState<DeliveryValues | null>(null)
   const dispatch = useDispatch()
+  const [purchase, { data }] = usePurchaseMutation()
 
   function closeCart() {
     dispatch(close())
@@ -18,6 +31,13 @@ const Cart = () => {
     dispatch(remove(id))
   }
 
+  function clearAll() {
+    dispatch(clear())
+    setDeliveryData(null)
+    setBuyState('cart')
+    closeCart()
+  }
+
   function getTotalPrice() {
     return items.reduce((acumulador, valorAtual) => {
       return (acumulador += valorAtual.preco)
@@ -25,26 +45,78 @@ const Cart = () => {
   }
 
   return (
-    <CartContainer className={isOpen ? 'is-open' : ''}>
+    <CartContainer className={isOpenCart ? 'is-open' : ''}>
       <Overlay onClick={closeCart} />
       <Sidebar>
-        <ul>
-          {items.map((item) => (
-            <CartItem key={item.id}>
-              <img src={item.foto} alt={item.nome} />
-              <div>
-                <h4>{item.nome}</h4>
-                <span>{formatPrice(item.preco)}</span>
-              </div>
-              <button type="button" onClick={() => removeItem(item.id)} />
-            </CartItem>
-          ))}
-        </ul>
-        <div>
-          <span>Valor total</span>
-          <span>{formatPrice(getTotalPrice())}</span>
-        </div>
-        <Button>Continuar com a entrega</Button>
+        {items.length > 0 ? (
+          <>
+            {buyState === 'cart' && (
+              <CartStep
+                items={items}
+                onNext={() => setBuyState('delivery')}
+                onRemove={removeItem}
+                getTotalPrice={getTotalPrice}
+              />
+            )}
+            {buyState === 'delivery' && (
+              <DeliveryStep
+                onNext={(values) => {
+                  setDeliveryData(values)
+                  setBuyState('payment')
+                }}
+                onBack={() => setBuyState('cart')}
+              />
+            )}
+            {buyState === 'payment' && deliveryData && (
+              <PaymentStep
+                items={items}
+                getTotalPrice={getTotalPrice}
+                onBack={() => setBuyState('delivery')}
+                finalizePurchase={(values) => {
+                  if (!deliveryData) return
+
+                  const payload = {
+                    products: items.map((item) => ({
+                      id: item.id,
+                      price: item.preco
+                    })),
+                    delivery: {
+                      receiver: deliveryData.name,
+                      address: {
+                        description: deliveryData.address,
+                        city: deliveryData.city,
+                        zipCode: deliveryData.cep,
+                        number: Number(deliveryData.number),
+                        complement: deliveryData.complement
+                      }
+                    },
+                    payment: {
+                      card: {
+                        name: values.cardDisplayName,
+                        number: values.cardNumber,
+                        code: Number(values.cardCode),
+                        expires: {
+                          month: Number(values.expiresMonth),
+                          year: Number(values.expiresYear)
+                        }
+                      }
+                    }
+                  }
+                  purchase(payload)
+                  setBuyState('success')
+                }}
+              />
+            )}
+            {buyState === 'success' && (
+              <SuccessStep orderId={data?.orderId} onFinish={clearAll} />
+            )}
+          </>
+        ) : (
+          <p className="empty-message">
+            O carrinho está vazio! Adicione algum produto para continuar com a
+            compra.
+          </p>
+        )}
       </Sidebar>
     </CartContainer>
   )
